@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Django Roadmap — Mid & Senior Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080B0F;--surface:#0E1318;--card:#131920;--card-hover:#18212B;
+  --border:#1E2A35;--border-hi:#2C3D4F;
+  --amber:#F0A500;--amber-dim:#7A5400;--amber-glow:rgba(240,165,0,.08);
+  --green:#22C55E;--green-dim:#14532D;
+  --purple:#A78BFA;--purple-dim:#3B1F6E;--purple-glow:rgba(167,139,250,.08);
+  --emerald:#34D399;--emerald-dim:#064E3B;--emerald-glow:rgba(52,211,153,.06);
+  --red:#F87171;
+  --txt:#D4DCE8;--txt-muted:#4E6070;--txt-dim:#2A3A48;
+  --mono:'IBM Plex Mono',monospace;--sans:'Outfit',sans-serif;
+  --radius:10px;--radius-sm:6px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:var(--sans);font-size:15px;line-height:1.6;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;
+  background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:48px 48px;opacity:.2;pointer-events:none;z-index:0}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:0 24px 100px}
+
+/* ── Header ── */
+.header{position:sticky;top:0;z-index:100;background:rgba(8,11,15,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:13px 24px;margin:0 -24px}
+.header-inner{max-width:980px;margin:0 auto}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+.logo{font-family:var(--mono);font-size:12px;color:var(--amber);letter-spacing:.08em;display:flex;align-items:center;gap:8px}
+.logo-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.header-meta{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.meta-item{font-family:var(--mono);font-size:11px;color:var(--txt-muted)}
+.meta-item span{color:var(--amber)}
+.reset-btn{font-family:var(--mono);font-size:11px;color:var(--txt-muted);background:none;border:1px solid var(--border);padding:4px 11px;border-radius:var(--radius-sm);cursor:pointer;transition:all .15s}
+.reset-btn:hover{border-color:var(--red);color:var(--red)}
+.master-bar-wrap{display:flex;align-items:center;gap:12px}
+.master-label{font-family:var(--mono);font-size:11px;color:var(--txt-muted);white-space:nowrap}
+.master-bar{flex:1;height:5px;background:var(--border);border-radius:5px;overflow:hidden}
+.master-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--emerald));border-radius:5px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.master-pct{font-family:var(--mono);font-size:13px;color:var(--amber);font-weight:600;min-width:36px;text-align:right}
+
+/* ── Page title ── */
+.page-title{padding:44px 0 28px;border-bottom:1px solid var(--border);margin-bottom:32px}
+.title-eyebrow{font-family:var(--mono);font-size:11px;color:var(--amber);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+.title-h1{font-size:34px;font-weight:600;line-height:1.15;letter-spacing:-.02em;color:#F0F4FA}
+.title-h1 em{font-style:normal;color:var(--amber)}
+.title-sub{margin-top:8px;color:var(--txt-muted);font-size:14px;font-weight:300}
+.start-row{display:flex;align-items:center;gap:14px;margin-top:18px}
+.start-btn{font-family:var(--mono);font-size:12px;background:var(--amber);color:#000;border:none;padding:8px 18px;border-radius:var(--radius-sm);cursor:pointer;font-weight:600;letter-spacing:.04em;transition:opacity .15s}
+.start-btn:hover{opacity:.85}
+.start-label{font-family:var(--mono);font-size:12px;color:var(--txt-muted)}
+
+/* ── Phase cards ── */
+.phase-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:36px}
+.phase-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;position:relative;overflow:hidden}
+.phase-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.phase-card.mid::before{background:var(--purple)}
+.phase-card.senior::before{background:var(--emerald)}
+.phase-tag{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;margin-bottom:6px;display:block}
+.mid .phase-tag{color:var(--purple)}.senior .phase-tag{color:var(--emerald)}
+.phase-card h3{font-size:15px;font-weight:500;color:var(--txt);margin-bottom:2px}
+.phase-months{font-size:12px;color:var(--txt-muted);margin-bottom:14px}
+.phase-bar-wrap{display:flex;align-items:center;gap:10px}
+.phase-bar{flex:1;height:3px;background:var(--border);border-radius:3px;overflow:hidden}
+.phase-fill{height:100%;border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.mid .phase-fill{background:var(--purple)}.senior .phase-fill{background:var(--emerald)}
+.phase-pct{font-family:var(--mono);font-size:12px;font-weight:600;min-width:30px;text-align:right}
+.mid .phase-pct{color:var(--purple)}.senior .phase-pct{color:var(--emerald)}
+.phase-stats{font-family:var(--mono);font-size:11px;color:var(--txt-muted);margin-top:8px}
+.phase-sub-bars{margin-top:14px;display:flex;flex-direction:column;gap:6px}
+.sub-bar-row{display:flex;align-items:center;gap:8px}
+.sub-bar-label{font-family:var(--mono);font-size:10px;color:var(--txt-muted);width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sub-bar{flex:1;height:2px;background:var(--border);border-radius:2px;overflow:hidden}
+.sub-fill{height:100%;border-radius:2px;transition:width .5s}
+.mid-sub .sub-fill{background:rgba(167,139,250,.6)}.senior-sub .sub-fill{background:rgba(52,211,153,.6)}
+.sub-pct{font-family:var(--mono);font-size:10px;min-width:24px;text-align:right}
+.mid-sub .sub-pct{color:rgba(167,139,250,.8)}.senior-sub .sub-pct{color:rgba(52,211,153,.8)}
+
+/* ── Filter bar ── */
+.filter-bar{display:flex;align-items:center;gap:8px;margin-bottom:22px;flex-wrap:wrap}
+.filter-btn{font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--txt-muted);cursor:pointer;letter-spacing:.04em;transition:all .15s}
+.filter-btn:hover{border-color:var(--border-hi);color:var(--txt)}
+.filter-btn.active{background:var(--amber);color:#000;border-color:var(--amber);font-weight:600}
+.filter-btn.mid-btn.active{background:var(--purple);border-color:var(--purple);color:#fff}
+.filter-btn.sr-btn.active{background:var(--emerald);border-color:var(--emerald);color:#000}
+.filter-sep{flex:1}
+.search-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:5px 12px;font-family:var(--mono);font-size:11px;color:var(--txt);width:190px;outline:none}
+.search-box:focus{border-color:var(--border-hi)}
+.search-box::placeholder{color:var(--txt-dim)}
+
+/* ── Section ── */
+.section-block{margin-bottom:10px}
+.section-header{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all .15s;user-select:none}
+.section-header:hover{background:var(--card-hover);border-color:var(--border-hi)}
+.section-header.open{border-radius:var(--radius) var(--radius) 0 0;border-bottom-color:transparent}
+.sec-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dot-mid{background:var(--purple)}.dot-senior{background:var(--emerald)}
+.sec-num{font-family:var(--mono);font-size:10px;color:var(--txt-dim);flex-shrink:0;min-width:24px}
+.sec-title{flex:1;font-size:13.5px;font-weight:500;color:var(--txt)}
+.sec-cat{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--txt-muted);background:var(--surface);padding:2px 8px;border-radius:20px;border:1px solid var(--border);white-space:nowrap}
+.sec-prog{font-family:var(--mono);font-size:11px;color:var(--txt-muted);min-width:38px;text-align:right}
+.sec-prog.done{color:var(--green)}
+.chevron{font-size:10px;color:var(--txt-muted);transition:transform .2s;margin-left:4px;flex-shrink:0}
+.open .chevron{transform:rotate(180deg)}
+.section-body{display:none;background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius)}
+.section-body.open{display:block}
+
+/* section inner bar */
+.sec-inner-bar{height:2px;background:var(--border);overflow:hidden}
+.sec-inner-fill{height:100%;transition:width .4s}
+.mid-sec .sec-inner-fill{background:var(--purple-dim)}.senior-sec .sec-inner-fill{background:var(--emerald-dim)}
+
+/* ── Task ── */
+.task-item{display:flex;align-items:flex-start;gap:11px;padding:8px 16px;border-bottom:1px solid rgba(30,42,53,.4);cursor:pointer;transition:background .1s}
+.task-item:last-of-type{border-bottom:none}
+.task-item:hover{background:rgba(240,165,0,.025)}
+.task-item.filtered-out{display:none}
+.task-cb{width:15px;height:15px;border:1.5px solid var(--border-hi);border-radius:4px;flex-shrink:0;margin-top:3px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.task-item.done .task-cb{background:var(--green);border-color:var(--green)}
+.chk{display:none;color:#000;font-size:9px;font-weight:700;line-height:1}
+.task-item.done .chk{display:block}
+.task-text{flex:1;font-size:13px;color:var(--txt);line-height:1.55}
+.task-item.done .task-text{color:var(--txt-muted);text-decoration:line-through;text-decoration-color:var(--txt-dim)}
+.task-tag{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:20px;border:1px solid;flex-shrink:0;margin-top:3px;white-space:nowrap}
+.tag-skill{color:var(--txt-muted);border-color:var(--border)}
+.tag-exercise{color:var(--amber);border-color:var(--amber-dim);background:var(--amber-glow)}
+.tag-tool{color:#C084FC;border-color:#4C1D95;background:rgba(192,132,252,.05)}
+.tag-project{color:var(--green);border-color:var(--green-dim);background:rgba(34,197,94,.05)}
+.tag-book{color:#93C5FD;border-color:#1E3A5F;background:rgba(147,197,253,.05)}
+
+/* ── Notes ── */
+.notes-wrap{padding:8px 16px 12px;border-top:1px dashed var(--border)}
+.notes-label{font-family:var(--mono);font-size:10px;color:var(--txt-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+.notes-area{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--txt);font-family:var(--mono);font-size:12px;padding:7px 10px;resize:vertical;min-height:50px;outline:none;transition:border-color .15s;line-height:1.5}
+.notes-area:focus{border-color:var(--amber-dim)}
+.notes-area::placeholder{color:var(--txt-dim)}
+
+/* ── Divider ── */
+.phase-divider{display:flex;align-items:center;gap:14px;margin:40px 0 18px}
+.div-line{flex:1;height:1px;background:var(--border)}
+.div-label{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;padding:5px 14px;border-radius:20px;border:1px solid;white-space:nowrap}
+.dl-mid{color:var(--purple);border-color:var(--purple-dim);background:rgba(167,139,250,.06)}
+.dl-senior{color:var(--emerald);border-color:var(--emerald-dim);background:rgba(52,211,153,.06)}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:26px;right:26px;background:var(--green);color:#000;font-family:var(--mono);font-size:12px;font-weight:600;padding:9px 16px;border-radius:var(--radius-sm);z-index:999;opacity:0;transform:translateY(8px);transition:all .22s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+
+/* ── Completion ── */
+.phase-done-banner{display:none;border-radius:var(--radius);padding:13px 18px;margin-bottom:14px;font-family:var(--mono);font-size:12px;text-align:center;letter-spacing:.04em}
+.phase-done-banner.mid-done{background:rgba(167,139,250,.08);border:1px solid var(--purple-dim);color:var(--purple)}
+.phase-done-banner.sr-done{background:rgba(52,211,153,.08);border:1px solid var(--emerald-dim);color:var(--emerald)}
+
+@media(max-width:660px){.phase-grid{grid-template-columns:1fr}.title-h1{font-size:26px}.phase-sub-bars{display:none}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="logo"><div class="logo-dot"></div>DJANGO ROADMAP — MID &amp; SENIOR</div>
+      <div class="header-meta">
+        <div class="meta-item">started <span id="hdr-start">—</span></div>
+        <div class="meta-item">day <span id="hdr-day">—</span></div>
+        <div class="meta-item">done <span id="hdr-done">0</span></div>
+        <button class="reset-btn" onclick="resetAll()">reset</button>
+      </div>
+    </div>
+    <div class="master-bar-wrap">
+      <div class="master-label">total progress</div>
+      <div class="master-bar"><div class="master-fill" id="master-fill" style="width:0%"></div></div>
+      <div class="master-pct" id="master-pct">0%</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="page-title">
+    <div class="title-eyebrow">// market-ready edition · mid → senior</div>
+    <h1 class="title-h1">Django Engineer<br><em>Progression Tracker</em></h1>
+    <p class="title-sub">280+ tasks across every skill that top companies actually interview and hire for.</p>
+    <div class="start-row">
+      <button class="start-btn" onclick="setStart()" id="start-btn">▶ Start today</button>
+      <span class="start-label" id="start-label"></span>
+    </div>
+  </div>
+
+  <div class="phase-done-banner mid-done" id="mid-banner">🎯 Phase 1 complete — you are ready for Senior roles. Update your CV.</div>
+  <div class="phase-done-banner sr-done" id="sr-banner">🏆 Phase 2 complete — you are operating at Senior level. Start aiming for Staff.</div>
+
+  <!-- Phase summary cards -->
+  <div class="phase-grid">
+    <div class="phase-card mid">
+      <span class="phase-tag">Phase 1 · Mid-level</span>
+      <h3>Foundation Mastery</h3>
+      <p class="phase-months">Months 1 – 6 &nbsp;·&nbsp; ~15–20 hrs/week</p>
+      <div class="phase-bar-wrap">
+        <div class="phase-bar"><div class="phase-fill" id="bar-mid" style="width:0%"></div></div>
+        <div class="phase-pct" id="pct-mid">0%</div>
+      </div>
+      <div class="phase-stats" id="stats-mid">0 / 0 tasks</div>
+      <div class="phase-sub-bars" id="subbars-mid"></div>
+    </div>
+    <div class="phase-card senior">
+      <span class="phase-tag">Phase 2 · Senior</span>
+      <h3>System Ownership</h3>
+      <p class="phase-months">Months 7 – 18 &nbsp;·&nbsp; ~15–20 hrs/week</p>
+      <div class="phase-bar-wrap">
+        <div class="phase-bar"><div class="phase-fill" id="bar-senior" style="width:0%"></div></div>
+        <div class="phase-pct" id="pct-senior">0%</div>
+      </div>
+      <div class="phase-stats" id="stats-senior">0 / 0 tasks</div>
+      <div class="phase-sub-bars" id="subbars-senior"></div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+    <button class="filter-btn" onclick="setFilter('todo',this)">To-do</button>
+    <button class="filter-btn" onclick="setFilter('done',this)">Done ✓</button>
+    <button class="filter-btn mid-btn" onclick="setFilter('mid',this)">Mid only</button>
+    <button class="filter-btn sr-btn" onclick="setFilter('senior',this)">Senior only</button>
+    <button class="filter-btn" onclick="setFilter('exercise',this)">Exercises</button>
+    <button class="filter-btn" onclick="setFilter('tool',this)">Tools</button>
+    <div class="filter-sep"></div>
+    <input class="search-box" type="text" placeholder="search tasks..." oninput="doSearch(this.value)">
+  </div>
+
+  <div id="root"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── DATA ────────────────────────────────────
+const DATA = [
+
+  // ═══════════════════════════════
+  // PHASE 1 — MID-LEVEL
+  // ═══════════════════════════════
+
+  {id:'orm', phase:'mid', n:1, title:'Django ORM — Deep Mastery', cat:'Core Django', tasks:[
+    {id:'orm01',tag:'skill',t:'Understand QuerySet laziness — trace exactly when SQL executes vs when it does not'},
+    {id:'orm02',tag:'skill',t:'Master annotate() with Avg, Count, Sum, Min, Max on real aggregation problems'},
+    {id:'orm03',tag:'skill',t:'Use Case/When with output_field and Then to replace Python-side conditional loops'},
+    {id:'orm04',tag:'skill',t:'Implement Window functions: row_number, rank, dense_rank, lag, lead for analytics queries'},
+    {id:'orm05',tag:'skill',t:'Write Subquery + OuterRef to fetch correlated values without extra round trips'},
+    {id:'orm06',tag:'skill',t:'Use Prefetch() with custom QuerySets — filter prefetched children without N+1'},
+    {id:'orm07',tag:'skill',t:'Understand select_related JOIN strategy vs prefetch_related separate query strategy'},
+    {id:'orm08',tag:'exercise',t:'Identify every N+1 in a legacy codebase using django-debug-toolbar, fix them all'},
+    {id:'orm09',tag:'skill',t:'Implement bulk_create with update_conflicts=True (upsert) — capture created PKs'},
+    {id:'orm10',tag:'skill',t:'Implement bulk_update with only the changed fields — avoid overwriting untouched columns'},
+    {id:'orm11',tag:'skill',t:'Build chunked queryset delete for large tables — never delete 1M rows in one transaction'},
+    {id:'orm12',tag:'skill',t:'Write a custom Manager that scopes every query to current tenant / company'},
+    {id:'orm13',tag:'skill',t:'Build a custom QuerySet with chainable business-logic methods: .active(), .for_user(), .overdue()'},
+    {id:'orm14',tag:'skill',t:'Use select_for_update() correctly — understand NOWAIT, SKIP LOCKED and deadlock risk'},
+    {id:'orm15',tag:'skill',t:'Use transaction.atomic() with savepoints — know when nested atomics are safe vs dangerous'},
+    {id:'orm16',tag:'exercise',t:'Zero-downtime migration on a 1M+ row table: nullable → backfill → required — document each step + lock duration'},
+    {id:'orm17',tag:'skill',t:'Squash 15+ old migrations without breaking existing data — document the process'},
+    {id:'orm18',tag:'skill',t:'Write RunPython migration safely — forward + reverse functions, queryset vs raw SQL'},
+    {id:'orm19',tag:'skill',t:'Know when raw() or connection.execute() beats the ORM — and the SQL injection traps'},
+    {id:'orm20',tag:'skill',t:'Configure CONN_MAX_AGE for persistent connections — measure p99 latency improvement'},
+    {id:'orm21',tag:'skill',t:'Use values() and values_list(flat=True) to avoid full model instantiation on read-heavy queries'},
+    {id:'orm22',tag:'skill',t:'Configure DATABASE_ROUTERS to send reads to a replica, writes to primary'},
+    {id:'orm23',tag:'exercise',t:'Write a deduplication script: annotate Count, find dupes, bulk delete — dry run first'},
+    {id:'orm24',tag:'skill',t:'Use iterator() on large querysets to avoid loading everything into memory at once'},
+    {id:'orm25',tag:'skill',t:'Understand defer() and only() — know how deferred field access causes extra queries'},
+  ]},
+
+  {id:'drf', phase:'mid', n:2, title:'Django REST Framework — Production Grade', cat:'Core Django', tasks:[
+    {id:'drf01',tag:'skill',t:'Trace how DRF serializer validation chain works: field-level → validate_<field> → validate()'},
+    {id:'drf02',tag:'skill',t:'Write a nested serializer with writable nested creates — parent + children in one POST'},
+    {id:'drf03',tag:'skill',t:'Override to_representation() to shape output based on request context or user role'},
+    {id:'drf04',tag:'skill',t:'Use SerializerMethodField with caching to avoid repeated computation per row'},
+    {id:'drf05',tag:'skill',t:'Build serializers with source=, write_only, read_only, required=False fields correctly'},
+    {id:'drf06',tag:'skill',t:'Implement custom ViewSet: get_queryset, get_serializer_class, get_permissions — per action'},
+    {id:'drf07',tag:'skill',t:'Add custom @action decorators on ViewSets — detail and list level with custom URL routes'},
+    {id:'drf08',tag:'skill',t:'Implement JWT auth with simplejwt: access + refresh, rotation, blacklist on logout'},
+    {id:'drf09',tag:'skill',t:'Add custom claims to JWT (user role, company_id) — read them in views without DB hits'},
+    {id:'drf10',tag:'skill',t:'Implement per-user and per-scope Redis-backed throttling — verify it actually enforces limits'},
+    {id:'drf11',tag:'skill',t:'Add URL-based versioning (/api/v1/) and header-based versioning — know both patterns'},
+    {id:'drf12',tag:'tool', t:'Generate OpenAPI 3.0 schema with drf-spectacular — add examples, response codes, descriptions'},
+    {id:'drf13',tag:'tool', t:'Set up Swagger UI and ReDoc from drf-spectacular for developer-facing API docs'},
+    {id:'drf14',tag:'skill',t:'Implement object-level permissions — a user can only access their own resources'},
+    {id:'drf15',tag:'skill',t:'Write an IsCompanyMember custom permission class that checks tenant membership'},
+    {id:'drf16',tag:'tool', t:'Add django-filter to a ViewSet — multi-field filtering, range filters, relationship filters'},
+    {id:'drf17',tag:'skill',t:'Implement cursor-based pagination — benchmark vs offset pagination at 1M rows'},
+    {id:'drf18',tag:'skill',t:'Build a bulk endpoint using HTTP 207 Multi-Status with per-item success/error responses'},
+    {id:'drf19',tag:'skill',t:'Write APITestCase tests covering: auth, permissions, throttling, validation, pagination'},
+    {id:'drf20',tag:'skill',t:'Test a file upload endpoint with APIClient using multipart — validate MIME server-side'},
+    {id:'drf21',tag:'skill',t:'Implement ETag and conditional GET (If-None-Match) on a resource-heavy endpoint'},
+    {id:'drf22',tag:'skill',t:'Add request/response logging middleware capturing method, path, status, duration'},
+    {id:'drf23',tag:'skill',t:'Design and implement a standard error response envelope used by all endpoints'},
+    {id:'drf24',tag:'skill',t:'Add deprecation notices: Sunset header + Deprecation header + docs note with removal date'},
+  ]},
+
+  {id:'apidesign', phase:'mid', n:3, title:'API Design Principles', cat:'API Design', tasks:[
+    {id:'apid01',tag:'skill',t:'Learn REST constraints — statelessness, uniform interface, correct resource naming'},
+    {id:'apid02',tag:'skill',t:'Design RESTful URLs: plural nouns, no verbs, nested only when truly hierarchical'},
+    {id:'apid03',tag:'skill',t:'Define a standard error response shape: code, message, field_errors — use it everywhere'},
+    {id:'apid04',tag:'skill',t:'Paginate every list endpoint — default page size, max cap enforced, link headers'},
+    {id:'apid05',tag:'skill',t:'Use HTTP status codes correctly: 201 vs 200, 422 vs 400, 409 vs 400, 503 vs 500'},
+    {id:'apid06',tag:'skill',t:'Design idempotent endpoints: PUT and DELETE must be safe to retry without side effects'},
+    {id:'apid07',tag:'skill',t:'Build a webhook sender: HMAC-SHA256 signed payloads, retry on failure, delivery log'},
+    {id:'apid08',tag:'skill',t:'Write an API changelog document — communicate breaking vs non-breaking changes'},
+    {id:'apid09',tag:'skill',t:'Implement a health check endpoint: /health/live and /health/ready separately'},
+    {id:'apid10',tag:'skill',t:'Rate limit at both Django application layer AND nginx/load balancer layer — defense in depth'},
+  ]},
+
+  {id:'async', phase:'mid', n:4, title:'Async Django & Task Queues', cat:'Core Django', tasks:[
+    {id:'async01',tag:'skill',t:'Understand WSGI vs ASGI — what changes exactly when you switch to uvicorn/daphne'},
+    {id:'async02',tag:'skill',t:'Write async views with async ORM access via sync_to_async wrappers'},
+    {id:'async03',tag:'skill',t:'Use httpx.AsyncClient from an async view — timeout, retry, connection pooling'},
+    {id:'async04',tag:'skill',t:'Parallelize independent async calls with asyncio.gather — understand failure semantics'},
+    {id:'async05',tag:'skill',t:'Know when NOT to use async views: CPU-bound tasks, sync middleware, blocking ORM calls'},
+    {id:'async06',tag:'exercise',t:'Build a Celery task with exponential backoff, max_retries=5, and a DB dead-letter queue'},
+    {id:'async07',tag:'skill',t:'Make a Celery task idempotent — safe to retry multiple times without double-processing'},
+    {id:'async08',tag:'skill',t:'Implement Celery chord: fan-out N parallel tasks + aggregating callback on all done'},
+    {id:'async09',tag:'skill',t:'Implement Celery group for parallel tasks that do not need aggregation'},
+    {id:'async10',tag:'tool', t:'Set up Celery Beat with django-celery-beat for DB-backed recurring schedules'},
+    {id:'async11',tag:'tool', t:'Monitor Celery with Flower: inspect active tasks, revoke stuck ones, see failure rates'},
+    {id:'async12',tag:'skill',t:'Build a Django Channels WebSocket consumer — connect/receive/send/disconnect lifecycle'},
+    {id:'async13',tag:'skill',t:'Authenticate a WebSocket connection via JWT token in the handshake query string'},
+    {id:'async14',tag:'skill',t:'Use channel groups to broadcast a message to all connected users of a tenant'},
+    {id:'async15',tag:'skill',t:'Write pytest-asyncio tests for async consumers using Channels testing utilities'},
+    {id:'async16',tag:'skill',t:'Handle WebSocket reconnection on the client — exponential backoff + message replay'},
+  ]},
+
+  {id:'caching', phase:'mid', n:5, title:'Caching Strategies', cat:'Performance', tasks:[
+    {id:'cache01',tag:'skill',t:'Understand Redis eviction policies: LRU, LFU, volatile-ttl — configure correctly for each use case'},
+    {id:'cache02',tag:'tool', t:'Use django-redis as cache backend — serialization, compression, connection pool tuning'},
+    {id:'cache03',tag:'skill',t:'Implement @cache_page per-view caching — vary cache key by user/language/role'},
+    {id:'cache04',tag:'skill',t:'Use template fragment caching for expensive sidebar/nav elements rendered server-side'},
+    {id:'cache05',tag:'skill',t:'Build a low-level cache layer with cache.get/set/delete — meaningful TTLs, key namespacing'},
+    {id:'cache06',tag:'skill',t:'Design write-through cache: update cache on every DB write to keep it fresh'},
+    {id:'cache07',tag:'skill',t:'Design event-driven cache invalidation: clear affected keys when a model signal fires'},
+    {id:'cache08',tag:'skill',t:'Implement cache stampede protection: Redis lock or probabilistic early expiration'},
+    {id:'cache09',tag:'skill',t:'Cache expensive aggregation query results — decide TTL based on acceptable staleness SLA'},
+    {id:'cache10',tag:'exercise',t:'Benchmark a hot endpoint before and after caching using Locust — document the gain'},
+    {id:'cache11',tag:'skill',t:'Use Redis pipeline to batch multiple cache operations into a single round trip'},
+    {id:'cache12',tag:'skill',t:'Implement a two-tier cache: local in-memory (functools.lru_cache) + Redis for shared state'},
+  ]},
+
+  {id:'security', phase:'mid', n:6, title:'Security — Django Hardening & OWASP', cat:'Security', tasks:[
+    {id:'sec01',tag:'skill',t:'Write a cheat sheet: map every OWASP Top 10 risk to its exact Django mitigation'},
+    {id:'sec02',tag:'skill',t:'Configure all SECURE_* Django settings: SSL redirect, HSTS, cookie flags, X-Frame-Options'},
+    {id:'sec03',tag:'tool', t:'Implement Content Security Policy with django-csp — nonce-based script allowlist, report-uri'},
+    {id:'sec04',tag:'skill',t:'Add X-Content-Type-Options, Referrer-Policy, Permissions-Policy headers to every response'},
+    {id:'sec05',tag:'skill',t:'Replace every hardcoded secret in a codebase with environment variables — audit git history'},
+    {id:'sec06',tag:'skill',t:'Integrate AWS Secrets Manager or HashiCorp Vault for rotating database credentials'},
+    {id:'sec07',tag:'tool', t:'Run Bandit and Safety on a codebase — fix all HIGH and CRITICAL severity findings'},
+    {id:'sec08',tag:'exercise',t:'Find and patch an IDOR vulnerability in a practice app — document the attack and fix'},
+    {id:'sec09',tag:'skill',t:'Implement API key authentication: key hashing with bcrypt, rotation flow, per-key scopes'},
+    {id:'sec10',tag:'skill',t:'Configure CORS correctly with django-cors-headers — whitelist only known origins, no wildcard'},
+    {id:'sec11',tag:'skill',t:'Prevent mass assignment: always use explicit serializer fields, never bare ModelSerializer'},
+    {id:'sec12',tag:'skill',t:'Validate file uploads server-side with python-magic — never trust Content-Type header'},
+    {id:'sec13',tag:'tool', t:'Run pip-audit or set up Dependabot for automated weekly dependency vulnerability scans'},
+    {id:'sec14',tag:'skill',t:'Implement account lockout after N failed logins using django-axes or custom middleware'},
+    {id:'sec15',tag:'skill',t:'Add two-factor auth with django-otp or django-allauth — TOTP and backup codes'},
+  ]},
+
+  {id:'testing', phase:'mid', n:7, title:'Testing & Quality Engineering', cat:'Quality', tasks:[
+    {id:'test01',tag:'skill',t:'Set up pytest-django: conftest.py, db fixture, django_db marker, settings override fixtures'},
+    {id:'test02',tag:'skill',t:'Build factory_boy factories for all core models: traits, SubFactory, LazyAttribute, Faker'},
+    {id:'test03',tag:'skill',t:'Write tests at three levels: unit (pure functions), integration (view + DB), API (APIClient)'},
+    {id:'test04',tag:'skill',t:'Mock external HTTP calls with responses or httpretty — never real HTTP in test suite'},
+    {id:'test05',tag:'skill',t:'Mock Celery tasks with CELERY_TASK_ALWAYS_EAGER=True — verify DB side effects'},
+    {id:'test06',tag:'skill',t:'Reach 80%+ test coverage on a production project — cover business logic, skip boilerplate'},
+    {id:'test07',tag:'tool', t:'Add pytest-cov with branch coverage to CI — fail build if coverage drops below threshold'},
+    {id:'test08',tag:'exercise',t:'Write a Locust load test simulating 100 concurrent users — find the breaking point'},
+    {id:'test09',tag:'skill',t:'Practice TDD: build one complete new feature test-first (red → green → refactor cycle)'},
+    {id:'test10',tag:'skill',t:'Write property-based tests with Hypothesis for a function with complex input space'},
+    {id:'test11',tag:'skill',t:'Use pytest parametrize to test one function across 10+ input/output combinations'},
+    {id:'test12',tag:'tool', t:'Set up pre-commit hooks: ruff, black, mypy, bandit — fail commit if any check fails'},
+    {id:'test13',tag:'skill',t:'Test a Celery task in isolation: call directly, assert DB state, verify retries on failure'},
+    {id:'test14',tag:'skill',t:'Write an integration test that exercises the full request → DB → cache → response cycle'},
+    {id:'test15',tag:'skill',t:'Add a regression test every time you fix a bug — so it never silently comes back'},
+  ]},
+
+  {id:'codequality', phase:'mid', n:8, title:'Code Quality & Tooling', cat:'Tooling', tasks:[
+    {id:'cq01',tag:'tool', t:'Add mypy to the project — type-annotate all public functions and fix every error'},
+    {id:'cq02',tag:'tool', t:'Use ruff as your linter — configure rules, understand why each rule exists'},
+    {id:'cq03',tag:'tool', t:'Enforce Black formatting across the entire codebase — end formatting debates in PRs'},
+    {id:'cq04',tag:'tool', t:'Use django-stubs for mypy Django support — typed model fields, typed queryset returns'},
+    {id:'cq05',tag:'tool', t:'Use django-debug-toolbar in development — SQL, cache, template, signal, profiling panels'},
+    {id:'cq06',tag:'tool', t:'Profile slow views with django-silk — capture SQL, time, query count per request'},
+    {id:'cq07',tag:'tool', t:'Set up Sentry in Django: source maps, environment tags, performance tracing, ignore 404s'},
+    {id:'cq08',tag:'tool', t:'Use structlog for structured JSON logging — add request_id, user_id to every log entry'},
+    {id:'cq09',tag:'skill',t:'Apply the 12-Factor App principles to your Django project — one by one, document each'},
+    {id:'cq10',tag:'skill',t:'Write a CONTRIBUTING.md: coding standards, review checklist, commit message format'},
+    {id:'cq11',tag:'skill',t:'Use django-extensions: shell_plus, graph_models, show_urls — daily productivity boost'},
+  ]},
+
+  {id:'filestorage', phase:'mid', n:9, title:'File Handling & Storage', cat:'Integrations', tasks:[
+    {id:'fs01',tag:'tool', t:'Configure django-storages with AWS S3 — DEFAULT_FILE_STORAGE, media files, custom domain'},
+    {id:'fs02',tag:'skill',t:'Generate pre-signed S3 URLs for secure, time-limited direct client uploads'},
+    {id:'fs03',tag:'skill',t:'Validate uploaded file types server-side using python-magic — reject invalid MIME types'},
+    {id:'fs04',tag:'skill',t:'Process image uploads asynchronously with Celery: resize, compress, generate thumbnails'},
+    {id:'fs05',tag:'skill',t:'Implement a chunked file upload endpoint for large files (100MB+)'},
+    {id:'fs06',tag:'skill',t:'Serve private media files through Django (not S3 directly) — check permissions before streaming'},
+    {id:'fs07',tag:'skill',t:'Set up CloudFront CDN in front of S3 for media — cache headers, signed URLs, invalidation'},
+  ]},
+
+  {id:'search', phase:'mid', n:10, title:'Search Integration', cat:'Integrations', tasks:[
+    {id:'srch01',tag:'skill',t:'Implement PostgreSQL FTS with SearchVector + SearchQuery — understand rank weights'},
+    {id:'srch02',tag:'skill',t:'Add SearchRank annotation to order by relevance — compare to ILIKE on a real dataset'},
+    {id:'srch03',tag:'tool', t:'Set up Elasticsearch with django-elasticsearch-dsl — index a model, sync on save via signals'},
+    {id:'srch04',tag:'skill',t:'Build a type-ahead autocomplete endpoint — debounced, 3-char min, indexed field lookup'},
+    {id:'srch05',tag:'skill',t:'Add trigram similarity search (pg_trgm extension) for fuzzy/typo-tolerant matching'},
+    {id:'srch06',tag:'exercise',t:'Benchmark PostgreSQL FTS vs Elasticsearch for your data volume — write the result doc'},
+  ]},
+
+  {id:'docker-basic', phase:'mid', n:11, title:'Docker & Basic CI/CD', cat:'DevOps', tasks:[
+    {id:'dock01',tag:'skill',t:'Write a Dockerfile: multi-stage build, non-root user, health check, layer cache optimized'},
+    {id:'dock02',tag:'skill',t:'Write docker-compose.yml with: web, celery worker, celery beat, Redis, PostgreSQL'},
+    {id:'dock03',tag:'skill',t:'Use .env files and docker-compose env injection — zero secrets in Dockerfile or source control'},
+    {id:'dock04',tag:'skill',t:'Build a GitHub Actions CI pipeline: lint → test → build Docker image → push to registry'},
+    {id:'dock05',tag:'skill',t:'Configure Gunicorn: worker_class, workers=2*CPU+1, timeout, max_requests with jitter'},
+    {id:'dock06',tag:'skill',t:'Set up Nginx as reverse proxy: static files, proxy headers, gzip, client_max_body_size'},
+    {id:'dock07',tag:'exercise',t:'Deploy a Django app to AWS EC2 or Render — handle migrations, static, env vars, SSL'},
+    {id:'dock08',tag:'skill',t:'Set up automated daily DB backups — snapshot, 30-day retention, monthly restore test'},
+    {id:'dock09',tag:'skill',t:'Configure health check in docker-compose — service restarts automatically on failure'},
+    {id:'dock10',tag:'skill',t:'Use Docker build secrets to pass credentials during build without leaking to layers'},
+  ]},
+
+  {id:'notifications', phase:'mid', n:12, title:'Email, Notifications & Webhooks', cat:'Integrations', tasks:[
+    {id:'notif01',tag:'tool', t:'Set up django-anymail with AWS SES or SendGrid — production transactional email'},
+    {id:'notif02',tag:'skill',t:'Build an email template system: HTML + text fallback, reusable base template with blocks'},
+    {id:'notif03',tag:'skill',t:'Queue all emails through Celery — never block a request on email delivery'},
+    {id:'notif04',tag:'skill',t:'Handle bounces and complaints via SES/SendGrid webhooks — suppress bad addresses'},
+    {id:'notif05',tag:'skill',t:'Implement in-app notifications: DB model + WebSocket push via Django Channels'},
+    {id:'notif06',tag:'skill',t:'Build a notification preference system: users choose which events they want notified about'},
+    {id:'notif07',tag:'skill',t:'Implement webhook receiver: HMAC-SHA256 signature verification, idempotency key check'},
+  ]},
+
+  {id:'adminpanel', phase:'mid', n:13, title:'Django Admin & Back-office', cat:'Core Django', tasks:[
+    {id:'adm01',tag:'skill',t:'Customize ModelAdmin: list_display, list_filter, search_fields, ordering, readonly_fields'},
+    {id:'adm02',tag:'skill',t:'Add custom admin actions: bulk status update, export to CSV, async trigger'},
+    {id:'adm03',tag:'skill',t:'Use InlineAdmin (Tabular and Stacked) to edit related records on the same page'},
+    {id:'adm04',tag:'skill',t:'Add custom SimpleListFilter for complex business conditions not coverable by standard filters'},
+    {id:'adm05',tag:'skill',t:'Restrict admin by IP via middleware — /admin/ must never be publicly exposed'},
+    {id:'adm06',tag:'tool', t:'Add django-import-export for CSV/Excel import and export from admin'},
+    {id:'adm07',tag:'skill',t:'Add django-admin-action-log to track who changed what in the admin'},
+  ]},
+
+  {id:'mid-ex', phase:'mid', n:14, title:'Exercises — Mid Phase', cat:'Exercises', tasks:[
+    {id:'mexm1',tag:'exercise',t:'Ex 1: Profile 5 views with django-debug-toolbar + EXPLAIN ANALYZE. Eliminate all N+1s. Write a before/after post-mortem markdown doc with query count and timings.'},
+    {id:'mexm2',tag:'exercise',t:'Ex 2: Build a URL shortener API — JWT, Redis throttling (10/min free, 1000/min paid), drf-spectacular docs, 90%+ test coverage, public GitHub repo with README.'},
+    {id:'mexm3',tag:'exercise',t:'Ex 3: Zero-downtime migration on a seeded 1M+ row table. Document each step, lock duration, and rollback plan. Artifact: migration files + runbook.'},
+    {id:'mexm4',tag:'exercise',t:'Ex 4: Idempotent Celery task — exponential backoff, DB dead-letter queue, tests that inject failures, Flower screenshot. Full working Django app on GitHub.'},
+    {id:'mexm5',tag:'exercise',t:'Ex 5: Full-text search on a product catalog with PostgreSQL FTS + trigram similarity for typos. Benchmark vs ILIKE at 100k rows. Write result doc.'},
+    {id:'mexm6',tag:'exercise',t:'Ex 6: Security audit on an open-source Django project — Bandit, pip-audit, manual IDOR check. Responsible disclosure report + 2 merged fix PRs.'},
+    {id:'mexm7',tag:'exercise',t:'Ex 7: File upload system — S3 pre-signed URL, async Celery thumbnail, MIME validation, private signed download URLs. Working demo + tests.'},
+    {id:'mexm8',tag:'exercise',t:'Ex 8: Notification system — WebSocket push via Django Channels + email fallback via Celery + user preference model. End-to-end integration test.'},
+  ]},
+
+  // ═══════════════════════════════
+  // PHASE 2 — SENIOR
+  // ═══════════════════════════════
+
+  {id:'postgres', phase:'senior', n:15, title:'PostgreSQL — Deep Optimization', cat:'Database', tasks:[
+    {id:'pg01',tag:'skill',t:'Create B-tree, GIN, partial, composite, and covering indexes — understand when each fits'},
+    {id:'pg02',tag:'skill',t:'Read a 20-node EXPLAIN ANALYZE plan: seq scan, index scan, bitmap heap, hash join, nested loop'},
+    {id:'pg03',tag:'skill',t:'Understand MVCC: how Postgres handles concurrent reads/writes, vacuum, bloat, XID wraparound'},
+    {id:'pg04',tag:'skill',t:'Implement table partitioning (range/list/hash) in a Django migration — verify partition pruning'},
+    {id:'pg05',tag:'skill',t:'Tune autovacuum per-table settings based on table size and update frequency'},
+    {id:'pg06',tag:'tool', t:'Analyze pg_stat_statements to find the top 10 slowest queries in production'},
+    {id:'pg07',tag:'skill',t:'Set up PostgreSQL streaming replication + configure Django DATABASE_ROUTERS to use replica'},
+    {id:'pg08',tag:'tool', t:'Install PgBouncer in transaction pooling mode — size pool, measure connection reduction'},
+    {id:'pg09',tag:'skill',t:'Write CTEs with Django RawSQL — understand when CTE beats subquery for plan clarity'},
+    {id:'pg10',tag:'skill',t:'Write a recursive CTE to traverse a tree structure: category hierarchy, org chart'},
+    {id:'pg11',tag:'skill',t:'Implement FTS with stored ts_vector column + GIN index + trigger for auto-update'},
+    {id:'pg12',tag:'skill',t:'Design a JSONB schema for flexible metadata — GIN index, jsonpath queries, partial index'},
+    {id:'pg13',tag:'skill',t:'Use advisory locks (pg_try_advisory_lock) to prevent duplicate job processing'},
+    {id:'pg14',tag:'skill',t:'Benchmark every index you add — never index blindly, always verify with EXPLAIN ANALYZE'},
+    {id:'pg15',tag:'exercise',t:'Simulate a deadlock in a test — identify the transaction order that causes it and fix it'},
+    {id:'pg16',tag:'skill',t:'Use pg_stat_activity to diagnose slow queries and long-running idle transactions'},
+    {id:'pg17',tag:'skill',t:'Set up pg_cron or an external cron to run VACUUM ANALYZE on large tables nightly'},
+    {id:'pg18',tag:'skill',t:'Design a time-series table with range partitioning — automatic partition creation, pruning'},
+  ]},
+
+  {id:'patterns', phase:'senior', n:16, title:'Architecture & Design Patterns', cat:'Architecture', tasks:[
+    {id:'pat01',tag:'skill',t:'Implement a service layer: extract all business logic from views into service functions/classes'},
+    {id:'pat02',tag:'skill',t:'Apply Command/Query Separation: separate read handlers and write commands explicitly'},
+    {id:'pat03',tag:'skill',t:'Define bounded contexts: split a project into 3 apps with clean public APIs, no cross-model imports'},
+    {id:'pat04',tag:'skill',t:'Implement the Repository pattern to abstract data access from business logic'},
+    {id:'pat05',tag:'skill',t:'Use Python typing.Protocol to define interfaces — swap implementations without coupling'},
+    {id:'pat06',tag:'skill',t:'Implement the Outbox pattern: write event + data in one DB transaction, publish from a separate worker'},
+    {id:'pat07',tag:'skill',t:'Replace Django signals with explicit domain events for cross-module communication'},
+    {id:'pat08',tag:'skill',t:'Apply the Strangler Fig: extract one feature from a monolith to a separate Django app'},
+    {id:'pat09',tag:'skill',t:'Design value objects with dataclass(frozen=True): equality by value, immutable, no identity'},
+    {id:'pat10',tag:'skill',t:'Implement a pipeline/chain of responsibility for complex multi-step processing'},
+    {id:'pat11',tag:'skill',t:'Use the Strategy pattern to swap business rules without changing call sites'},
+    {id:'pat12',tag:'skill',t:'Design a plugin system: apps can register hooks without modifying the core module'},
+    {id:'pat13',tag:'skill',t:'Apply DDD aggregate boundaries: one aggregate root per transaction, no cross-aggregate FK updates'},
+    {id:'pat14',tag:'skill',t:'Implement a Unit of Work pattern to group multiple DB operations into a single commit'},
+  ]},
+
+  {id:'multitenancy', phase:'senior', n:17, title:'Multi-tenancy Architecture', cat:'Architecture', tasks:[
+    {id:'mt01',tag:'skill',t:'Implement shared-schema tenancy: every model has company_id, manager scopes all queries automatically'},
+    {id:'mt02',tag:'skill',t:'Implement schema-per-tenant using PostgreSQL schemas — set search_path per request'},
+    {id:'mt03',tag:'skill',t:'Implement database-per-tenant with Django DATABASE_ROUTERS — dynamic routing by tenant'},
+    {id:'mt04',tag:'exercise',t:'Build PoC for all 3 models, benchmark at 100 tenants, write ADR recommending one approach'},
+    {id:'mt05',tag:'skill',t:'Implement tenant context middleware: resolve tenant from JWT claim, subdomain, or header'},
+    {id:'mt06',tag:'exercise',t:'Write a cross-tenant data leakage test suite — probe every endpoint for isolation failures'},
+    {id:'mt07',tag:'skill',t:'Handle migrations across 500 tenants without downtime — parallel migration runner'},
+    {id:'mt08',tag:'skill',t:'Implement per-tenant feature flags: tenant A gets feature X, tenant B does not'},
+    {id:'mt09',tag:'skill',t:'Design tenant onboarding flow: provisioning, schema setup, seed data, admin user creation'},
+    {id:'mt10',tag:'skill',t:'Implement tenant-aware rate limiting: each tenant has its own quota, shared limits are dangerous'},
+  ]},
+
+  {id:'messagequeue', phase:'senior', n:18, title:'Message Queues & Event-Driven Design', cat:'Architecture', tasks:[
+    {id:'mq01',tag:'skill',t:'Set up RabbitMQ with Celery — exchanges, queues, routing keys, dead-letter exchanges'},
+    {id:'mq02',tag:'tool', t:'Set up Kafka with confluent-kafka-python — producer, consumer group, offset management'},
+    {id:'mq03',tag:'tool', t:'Set up AWS SQS with Celery or boto3 — FIFO vs standard, visibility timeout tuning'},
+    {id:'mq04',tag:'skill',t:'Implement at-least-once delivery and idempotency key check in every consumer'},
+    {id:'mq05',tag:'skill',t:'Design a DLQ strategy: routing, alerting on queue depth, replay mechanism'},
+    {id:'mq06',tag:'skill',t:'Handle consumer lag — monitor with CloudWatch or Kafka consumer lag metrics'},
+    {id:'mq07',tag:'skill',t:'Design event schema versioning — backward/forward compatibility with JSON Schema'},
+    {id:'mq08',tag:'exercise',t:'Implement the Saga pattern: order → payment → fulfillment with compensating transactions'},
+    {id:'mq09',tag:'skill',t:'Implement exactly-once semantics where required — know why it is hard and costly'},
+  ]},
+
+  {id:'devops-sr', phase:'senior', n:19, title:'DevOps, Cloud & Infrastructure', cat:'DevOps', tasks:[
+    {id:'dosr01',tag:'skill',t:'Deploy Django to AWS ECS Fargate — task definitions, auto-scaling, ALB health checks'},
+    {id:'dosr02',tag:'skill',t:'Deploy Django to EKS — Deployments, Services, Ingress, ConfigMaps, Secrets, HPA'},
+    {id:'dosr03',tag:'tool', t:'Write Helm charts for your Django app — values.yaml, templating, per-environment overrides'},
+    {id:'dosr04',tag:'tool', t:'Write Terraform modules: VPC, RDS, ElastiCache, ECS cluster, IAM roles — no click-ops'},
+    {id:'dosr05',tag:'skill',t:'Implement blue-green deployment: two identical environments, instant cutover at load balancer'},
+    {id:'dosr06',tag:'skill',t:'Implement canary deployment: route 5% to new version, monitor error rate, promote or rollback'},
+    {id:'dosr07',tag:'tool', t:'Set up Prometheus + Grafana: django-prometheus metrics, latency histogram, alerting rules'},
+    {id:'dosr08',tag:'tool', t:'Set up Loki or ELK for log aggregation — structured log ingestion, search, dashboards'},
+    {id:'dosr09',tag:'tool', t:'Implement OpenTelemetry distributed tracing — instrument Django, Celery, and outbound HTTP'},
+    {id:'dosr10',tag:'tool', t:'Set up PagerDuty or OpsGenie alerting — escalation policies, on-call rotation, runbook links'},
+    {id:'dosr11',tag:'skill',t:'Configure CloudFront CDN for Django static files and media — cache headers, invalidation'},
+    {id:'dosr12',tag:'skill',t:'Implement infrastructure drift detection with Terraform plan in CI — alert on unexpected changes'},
+    {id:'dosr13',tag:'skill',t:'Set up cost monitoring with AWS Cost Explorer — alert on anomalies, right-size instances'},
+    {id:'dosr14',tag:'skill',t:'Implement automated database failover — RDS Multi-AZ, test failover monthly'},
+  ]},
+
+  {id:'security-sr', phase:'senior', n:20, title:'Advanced Security & Compliance', cat:'Security', tasks:[
+    {id:'secsr01',tag:'exercise',t:'Perform a STRIDE threat model on your system — attack surface map, mitigation priority list'},
+    {id:'secsr02',tag:'skill',t:'Implement OAuth2 Authorization Server with django-oauth-toolkit — PKCE, scopes, introspection'},
+    {id:'secsr03',tag:'tool', t:'Set up Semgrep SAST in CI — write a custom rule for a pattern specific to your codebase'},
+    {id:'secsr04',tag:'tool', t:'Run OWASP ZAP DAST against staging — triage and fix all HIGH severity findings'},
+    {id:'secsr05',tag:'tool', t:'Set up TruffleHog or GitGuardian secret scanning — block commits with committed secrets'},
+    {id:'secsr06',tag:'skill',t:'Implement GDPR requirements: erasure, data portability export, consent tracking, audit log'},
+    {id:'secsr07',tag:'skill',t:'Encrypt sensitive fields at rest using django-encrypted-fields or AES at the application layer'},
+    {id:'secsr08',tag:'skill',t:'Set up a WAF (AWS WAF or Cloudflare) — configure SQL injection and XSS managed rule groups'},
+    {id:'secsr09',tag:'skill',t:'Build a security runbook: credential leak response, breach response, escalation contacts'},
+    {id:'secsr10',tag:'skill',t:'Implement dependency pinning and reproducible builds — lock all transitive dependencies'},
+    {id:'secsr11',tag:'skill',t:'Set up mutual TLS (mTLS) for internal service-to-service communication'},
+  ]},
+
+  {id:'perf', phase:'senior', n:21, title:'Performance Engineering', cat:'Performance', tasks:[
+    {id:'perf01',tag:'tool', t:'Profile Python code with py-spy — generate a flame graph, identify CPU hot spots live'},
+    {id:'perf02',tag:'tool', t:'Profile memory with memray — find leaks in long-running Celery workers'},
+    {id:'perf03',tag:'tool', t:'Use django-silk in staging — capture SQL, time, query count for every request'},
+    {id:'perf04',tag:'exercise',t:'Load test to 500 concurrent users with Locust — document failure mode and recovery behavior'},
+    {id:'perf05',tag:'exercise',t:'Reduce a specific endpoint from 200ms to under 50ms using profiling data, not guesswork'},
+    {id:'perf06',tag:'skill',t:'Implement PgBouncer — measure reduction in Postgres connections under 500 concurrent users'},
+    {id:'perf07',tag:'skill',t:'Profile and fix GIL contention in a CPU-bound Celery task — move to multiprocessing'},
+    {id:'perf08',tag:'skill',t:'Implement a read-through cache for a high-traffic endpoint — measure cache hit ratio'},
+    {id:'perf09',tag:'skill',t:'Use Postgres materialized views for expensive aggregations — refresh with a Celery Beat job'},
+    {id:'perf10',tag:'skill',t:'Optimize Django startup time: measure import times, deferred imports, app ready() overhead'},
+    {id:'perf11',tag:'skill',t:'Implement async pagination using asyncio for heavy reporting endpoints'},
+  ]},
+
+  {id:'sre', phase:'senior', n:22, title:'SRE & Reliability Engineering', cat:'Operations', tasks:[
+    {id:'sre01',tag:'skill',t:'Define SLIs and SLOs for your service: availability, p99 latency, error rate — document them'},
+    {id:'sre02',tag:'skill',t:'Calculate your error budget: acceptable downtime per month at 99.9% SLO'},
+    {id:'sre03',tag:'skill',t:'Set up burn rate alerts: fire when error budget is consumed too fast'},
+    {id:'sre04',tag:'skill',t:'Write a runbook for every alert: what it means, what to check, how to fix, how to escalate'},
+    {id:'sre05',tag:'exercise',t:'Write a blameless post-mortem for a real or simulated incident: timeline, root cause, action items'},
+    {id:'sre06',tag:'skill',t:'Implement a circuit breaker: stop calling a failing dependency after N consecutive errors'},
+    {id:'sre07',tag:'skill',t:'Design and test graceful shutdown: Django drains in-flight requests on SIGTERM before exiting'},
+    {id:'sre08',tag:'skill',t:'Set up automated rollback: revert deployment automatically if error rate spikes post-deploy'},
+    {id:'sre09',tag:'exercise',t:'Game day: simulate DB unavailability in staging — document what broke, update runbooks'},
+    {id:'sre10',tag:'skill',t:'Set up synthetic monitoring: scheduled tests simulating real user journeys in production'},
+  ]},
+
+  {id:'adv-testing', phase:'senior', n:23, title:'Advanced Testing Techniques', cat:'Quality', tasks:[
+    {id:'at01',tag:'skill',t:'Write contract tests with Pact — one producer, one consumer, verified in CI on both sides'},
+    {id:'at02',tag:'tool', t:'Run mutation testing with mutmut — measure how many code mutations your tests catch'},
+    {id:'at03',tag:'skill',t:'Build a test data seeding script for staging: realistic volumes, referential integrity, anonymized PII'},
+    {id:'at04',tag:'skill',t:'Write integration tests against real PostgreSQL (no SQLite) — use pytest-docker to spin it up'},
+    {id:'at05',tag:'skill',t:'Implement chaos in tests: randomly kill Redis connection, verify the app degrades gracefully'},
+    {id:'at06',tag:'tool', t:'Parallelize the test suite with pytest-xdist — target under 3 minutes total runtime in CI'},
+    {id:'at07',tag:'skill',t:'Write a performance regression test: fail CI if endpoint p99 exceeds a defined threshold'},
+  ]},
+
+  {id:'graphql', phase:'senior', n:24, title:'GraphQL & API Gateway', cat:'API Design', tasks:[
+    {id:'gql01',tag:'tool', t:'Build a GraphQL API with Strawberry-django — types, queries, mutations, field-level permissions'},
+    {id:'gql02',tag:'skill',t:'Solve N+1 in GraphQL using Strawberry DataLoader — understand the batching mechanism'},
+    {id:'gql03',tag:'skill',t:'Add GraphQL subscriptions over WebSocket using Strawberry + Django Channels'},
+    {id:'gql04',tag:'skill',t:'Write a decision framework: when GraphQL beats REST and when it is overkill'},
+    {id:'gql05',tag:'exercise',t:'Build an API gateway BFF aggregating 3+ downstream services — circuit breaker, tracing, versioning'},
+  ]},
+
+  {id:'data-eng', phase:'senior', n:25, title:'Data Engineering & Reporting', cat:'Data', tasks:[
+    {id:'de01',tag:'skill',t:'Build an ETL pipeline with Celery Beat: extract from DB, transform, load to data warehouse'},
+    {id:'de02',tag:'skill',t:'Set up CDC with Debezium or pg_logical — stream DB changes to Kafka topic'},
+    {id:'de03',tag:'skill',t:'Design a denormalized reporting table — populated by CDC or async aggregation, not live queries'},
+    {id:'de04',tag:'skill',t:'Implement a data export API: paginated, streaming response, gzip compression for large datasets'},
+    {id:'de05',tag:'skill',t:'Build a styled Excel/PDF report generator with openpyxl + WeasyPrint — async delivery via Celery'},
+    {id:'de06',tag:'skill',t:'Implement data anonymization for GDPR: mask PII in exports and staging environments'},
+  ]},
+
+  {id:'leadership-sr', phase:'senior', n:26, title:'Leadership & Technical Communication', cat:'Leadership', tasks:[
+    {id:'lsr01',tag:'skill',t:'Give a code review that teaches: every comment links to a doc and explains the why, not just what'},
+    {id:'lsr02',tag:'skill',t:'Write your first Architecture Decision Record at work — get it peer-reviewed and merged'},
+    {id:'lsr03',tag:'skill',t:'Break down an ambiguous product requirement into tasks with estimates — present it in planning'},
+    {id:'lsr04',tag:'skill',t:'Write a blameless post-mortem for a real production incident — publish to the team'},
+    {id:'lsr05',tag:'skill',t:'Mentor a mid-level developer for 8 weeks: weekly 1:1s, code reviews, stretch goal setting'},
+    {id:'lsr06',tag:'skill',t:'Lead a design session: whiteboard a feature, facilitate discussion, write up the decision'},
+    {id:'lsr07',tag:'skill',t:'Present a technical constraint to a non-technical stakeholder — business impact first, no jargon'},
+    {id:'lsr08',tag:'skill',t:'Write a technical comparison doc for two library/tech choices — benchmarks, ADR, recommendation'},
+    {id:'lsr09',tag:'skill',t:'Document on-call runbooks for every production system you own — someone else must be able to cover'},
+    {id:'lsr10',tag:'skill',t:'Submit a talk proposal to DjangoCon, PyCon, or a local meetup — submit even if it gets rejected'},
+    {id:'lsr11',tag:'skill',t:'Publish a technical blog post about something you measured and built — quality over quantity'},
+  ]},
+
+  {id:'sr-ex', phase:'senior', n:27, title:'Exercises — Senior Phase', cat:'Exercises', tasks:[
+    {id:'exsr1',tag:'exercise',t:'Ex 9: Multi-tenancy PoC — all 3 isolation models, benchmarked at 100 tenants. ADR doc + GitHub repo.'},
+    {id:'exsr2',tag:'exercise',t:'Ex 10: Load test 500 concurrent users. Find breaking point. Apply one fix (PgBouncer/cache/index). Re-run. Grafana before/after screenshots.'},
+    {id:'exsr3',tag:'exercise',t:'Ex 11: Channels real-time notifications — JWT WebSocket auth, channel groups, per-tenant isolation, pytest-asyncio tests.'},
+    {id:'exsr4',tag:'exercise',t:'Ex 12: STRIDE threat model your current system. Top 3 risks. Implement mitigations. Security design doc.'},
+    {id:'exsr5',tag:'exercise',t:'Ex 13: Full observability — OpenTelemetry traces + Prometheus metrics + structured logs with correlation IDs. Screenshot one request traced end-to-end.'},
+    {id:'exsr6',tag:'exercise',t:'Ex 14: CDC pipeline — Postgres → Debezium → Kafka → Django consumer → reporting table. End-to-end working demo.'},
+    {id:'exsr7',tag:'exercise',t:'Ex 15: Chaos game day — kill DB, crash Redis, inject 2s external API latency. Document what broke, what held, update every runbook.'},
+    {id:'exsr8',tag:'exercise',t:'Ex 16: Write a contract test suite with Pact for a producer/consumer API pair — both sides pass in CI.'},
+    {id:'exsr9',tag:'exercise',t:'Ex 17: Reduce a real endpoint from >200ms to <50ms using py-spy + EXPLAIN ANALYZE. Document every step taken.'},
+  ]},
+
+];
+
+// ─── STATE ───────────────────────────────────
+let state = {done:{}, notes:{}, startDate:null};
+let filter = 'all';
+let search = '';
+
+async function save(){
+  try{ await window.storage.set('rm2025:v2', JSON.stringify(state)); }
+  catch(_){ try{localStorage.setItem('rm2025:v2', JSON.stringify(state));}catch(__){} }
+}
+async function load(){
+  try{
+    const r = await window.storage.get('rm2025:v2');
+    if(r && r.value) state = JSON.parse(r.value);
+  }catch(_){
+    try{ const s=localStorage.getItem('rm2025:v2'); if(s) state=JSON.parse(s); }catch(__){} 
+  }
+}
+
+// ─── RENDER ──────────────────────────────────
+function render(){
+  const root = document.getElementById('root');
+  let html = '';
+  let lastPhase = null;
+  let secIdx = 0;
+
+  DATA.forEach(sec => {
+    if(sec.phase !== lastPhase){
+      const label = sec.phase === 'mid' ? 'Phase 1 — Mid-level Foundation' : 'Phase 2 — Senior Ownership';
+      const cls = sec.phase === 'mid' ? 'dl-mid' : 'dl-senior';
+      html += `<div class="phase-divider"><div class="div-line"></div><div class="div-label ${cls}">${label}</div><div class="div-line"></div></div>`;
+      lastPhase = sec.phase;
+    }
+
+    const done = sec.tasks.filter(t => state.done[t.id]).length;
+    const total = sec.tasks.length;
+    const allDone = done === total;
+    const dotCls = sec.phase === 'mid' ? 'dot-mid' : 'dot-senior';
+    const secCls = sec.phase === 'mid' ? 'mid-sec' : 'senior-sec';
+    const pct = total ? Math.round(done/total*100) : 0;
+
+    html += `<div class="section-block ${secCls}" id="sec-${sec.id}">
+<div class="section-header" onclick="toggleSec('${sec.id}')">
+  <div class="sec-dot ${dotCls}"></div>
+  <div class="sec-num">${String(sec.n).padStart(2,'0')}</div>
+  <div class="sec-title">${sec.title}</div>
+  <div class="sec-cat">${sec.cat}</div>
+  <div class="sec-prog ${allDone?'done':''}" id="sp-${sec.id}">${done}/${total}</div>
+  <div class="chevron">▾</div>
+</div>
+<div class="section-body" id="body-${sec.id}">
+  <div class="sec-inner-bar"><div class="sec-inner-fill" id="sf-${sec.id}" style="width:${pct}%"></div></div>`;
+
+    sec.tasks.forEach(task => {
+      const isDone = !!state.done[task.id];
+      html += `<div class="task-item ${isDone?'done':''}" id="ti-${task.id}" data-phase="${sec.phase}" data-tag="${task.tag}" data-txt="${task.t.toLowerCase().replace(/"/g,'&quot;')}" onclick="toggleTask('${task.id}')">
+  <div class="task-cb"><div class="chk">✓</div></div>
+  <div class="task-text">${task.t}</div>
+  <div class="task-tag tag-${task.tag}">${task.tag}</div>
+</div>`;
+    });
+
+    html += `<div class="notes-wrap">
+  <div class="notes-label">// notes</div>
+  <textarea class="notes-area" placeholder="resources, blockers, discoveries, links..." oninput="saveNote('${sec.id}',this.value)">${(state.notes[sec.id]||'').replace(/</g,'&lt;')}</textarea>
+</div></div></div>`;
+  });
+
+  root.innerHTML = html;
+  updateStats();
+  applyFilter();
+  buildSubBars();
+}
+
+function toggleSec(id){
+  const h = document.querySelector(`#sec-${id} .section-header`);
+  const b = document.getElementById(`body-${id}`);
+  h.classList.toggle('open');
+  b.classList.toggle('open');
+}
+
+function toggleTask(id){
+  state.done[id] = !state.done[id];
+  const el = document.getElementById(`ti-${id}`);
+  el.classList.toggle('done', !!state.done[id]);
+  save();
+  updateStats();
+  buildSubBars();
+  if(state.done[id]) showToast('Task completed ✓');
+}
+
+function saveNote(sid, v){ state.notes[sid]=v; save(); }
+
+function updateStats(){
+  const all = DATA.flatMap(s => s.tasks);
+  const totalAll = all.length;
+  const doneAll = all.filter(t => state.done[t.id]).length;
+  const pct = totalAll ? Math.round(doneAll/totalAll*100) : 0;
+  document.getElementById('master-fill').style.width = pct+'%';
+  document.getElementById('master-pct').textContent = pct+'%';
+  document.getElementById('hdr-done').textContent = doneAll+'/'+totalAll;
+
+  ['mid','senior'].forEach(phase => {
+    const tasks = DATA.filter(s => s.phase===phase).flatMap(s => s.tasks);
+    const tot = tasks.length;
+    const done = tasks.filter(t => state.done[t.id]).length;
+    const p = tot ? Math.round(done/tot*100) : 0;
+    document.getElementById(`bar-${phase}`).style.width = p+'%';
+    document.getElementById(`pct-${phase}`).textContent = p+'%';
+    document.getElementById(`stats-${phase}`).textContent = `${done} / ${tot} tasks`;
+
+    const banner = document.getElementById(`${phase === 'mid' ? 'mid' : 'sr'}-banner`);
+    if(banner) banner.style.display = (done===tot && tot>0) ? 'block' : 'none';
+  });
+
+  DATA.forEach(sec => {
+    const el = document.getElementById(`sp-${sec.id}`);
+    const sf = document.getElementById(`sf-${sec.id}`);
+    if(!el) return;
+    const done = sec.tasks.filter(t => state.done[t.id]).length;
+    const total = sec.tasks.length;
+    const p = total ? Math.round(done/total*100) : 0;
+    el.textContent = `${done}/${total}`;
+    el.classList.toggle('done', done === total);
+    if(sf) sf.style.width = p+'%';
+  });
+}
+
+function buildSubBars(){
+  ['mid','senior'].forEach(phase => {
+    const secs = DATA.filter(s => s.phase === phase);
+    const cls = phase === 'mid' ? 'mid-sub' : 'senior-sub';
+    const container = document.getElementById(`subbars-${phase}`);
+    if(!container) return;
+    container.innerHTML = secs.map(sec => {
+      const done = sec.tasks.filter(t => state.done[t.id]).length;
+      const total = sec.tasks.length;
+      const p = total ? Math.round(done/total*100) : 0;
+      return `<div class="sub-bar-row ${cls}">
+        <div class="sub-bar-label" title="${sec.title}">${sec.title}</div>
+        <div class="sub-bar"><div class="sub-fill" style="width:${p}%"></div></div>
+        <div class="sub-pct">${p}%</div>
+      </div>`;
+    }).join('');
+  });
+}
+
+function setFilter(f, btn){
+  filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilter();
+}
+
+function applyFilter(){
+  document.querySelectorAll('.task-item').forEach(el => {
+    const isDone = el.classList.contains('done');
+    const tag = el.dataset.tag;
+    const phase = el.dataset.phase;
+    const txt = (el.dataset.txt || '').toLowerCase();
+    const mf =
+      filter==='all'      ? true :
+      filter==='todo'     ? !isDone :
+      filter==='done'     ? isDone :
+      filter==='mid'      ? phase==='mid' :
+      filter==='senior'   ? phase==='senior' :
+      filter==='exercise' ? tag==='exercise' :
+      filter==='tool'     ? tag==='tool' : true;
+    const ms = !search || txt.includes(search.toLowerCase());
+    el.classList.toggle('filtered-out', !(mf && ms));
+  });
+}
+
+function doSearch(q){ search = q; applyFilter(); }
+
+function setStart(){
+  if(state.startDate) return;
+  state.startDate = new Date().toISOString();
+  save();
+  renderStart();
+}
+
+function renderStart(){
+  if(!state.startDate) return;
+  const d = new Date(state.startDate);
+  const days = Math.floor((new Date()-d)/86400000)+1;
+  const fmt = d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  document.getElementById('hdr-start').textContent = fmt;
+  document.getElementById('hdr-day').textContent = days;
+  document.getElementById('start-label').textContent = `Started ${fmt} — day ${days}`;
+  document.getElementById('start-btn').style.display = 'none';
+}
+
+let toastT;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(()=>t.classList.remove('show'), 2000);
+}
+
+function resetAll(){
+  if(!confirm('Reset ALL progress? This cannot be undone.')) return;
+  state = {done:{}, notes:{}, startDate:null};
+  save();
+  document.getElementById('hdr-start').textContent='—';
+  document.getElementById('hdr-day').textContent='—';
+  document.getElementById('start-label').textContent='';
+  document.getElementById('start-btn').style.display='inline-block';
+  render();
+  showToast('Progress reset');
+}
+
+async function init(){
+  await load();
+  render();
+  renderStart();
+}
+init();
+</script>
+</body>
+</html>
